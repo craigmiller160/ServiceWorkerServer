@@ -10,11 +10,21 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/hello', (req, res) => {
-    const headers = Object.entries(req.headers)
+const getAuthHeader = (headers) =>
+    Object.entries(headers)
         .filter(([key]) => 'authorization' === key.toLowerCase())
         .map(([key, value]) => `${key}=${value}`);
-    res.send(`Hello World: ${headers}`);
+
+app.get('/hello', (req, res) => {
+    const authHeader = getAuthHeader(headers);
+    res.send(`Hello World: ${authHeader}`);
+});
+
+app.get('/image', (req, res) => {
+    const authHeader = getAuthHeader(headers);
+    console.log(`AuthHeader: ${authHeader}`);
+    res.setHeader('Content-Type', 'image/jpg');
+    res.sendFile('/assets/images/image1.jpg', { root: __dirname });
 });
 
 app.listen(3000, () => console.log('Listening on port 3000'));
