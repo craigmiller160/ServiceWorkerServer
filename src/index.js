@@ -16,12 +16,12 @@ const getAuthHeader = (headers) =>
         .map(([key, value]) => `${key}=${value}`);
 
 app.get('/hello', (req, res) => {
-    const authHeader = getAuthHeader(headers);
+    const authHeader = getAuthHeader(req.headers);
     res.send(`Hello World: ${authHeader}`);
 });
 
 app.get('/image', (req, res) => {
-    const authHeader = getAuthHeader(headers);
+    const authHeader = getAuthHeader(req.headers);
     console.log(`AuthHeader: ${authHeader}`);
     res.setHeader('Content-Type', 'image/jpg');
     res.sendFile('/assets/images/image1.jpg', { root: __dirname });
