@@ -16,14 +16,12 @@ app.use((req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         res.status(401).end();
-        next();
         return;
     }
 
     const authToken = authHeader.replace(/^Bearer /, '');
     if (authToken !== token) {
         res.status(401).end();
-        next();
         return;
     }
 
