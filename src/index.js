@@ -15,12 +15,12 @@ const getAuthHeader = (headers) =>
         .filter(([key]) => 'authorization' === key.toLowerCase())
         .map(([key, value]) => `${key}=${value}`);
 
-app.get('/hello', (req, res) => {
+app.get('/api/hello', (req, res) => {
     const authHeader = getAuthHeader(req.headers);
     res.send(`Hello World: ${authHeader}`);
 });
 
-app.get('/image', (req, res) => {
+app.get('/api/image', (req, res) => {
     const authHeader = getAuthHeader(req.headers);
     console.log(`AuthHeader: ${authHeader}`);
     res.setHeader('Content-Type', 'image/jpg');
