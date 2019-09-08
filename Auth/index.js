@@ -49,7 +49,6 @@ app.get('/api/image', (req, res) => {
 
 app.post('/api/login', jsonParser, (req, res) => {
     if (username === req.body.username && password === req.body.password) {
-        // res.setHeader('Content-Type', 'application/json');
         res.json({ token });
         return;
     }
