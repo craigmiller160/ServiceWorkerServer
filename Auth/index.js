@@ -17,18 +17,22 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+    console.log('Middleware', req.url); // TODO delete this
     if (req.url === '/api/login') {
+        console.log('Login url'); // TODO delete this
         next();
         return;
     }
 
     const authHeader = req.headers.authorization;
     if (!authHeader) {
+        console.log('No auth header');
         res.status(401).end();
         return;
     }
 
     const authToken = authHeader.replace(/^Bearer /, '');
+    console.log('Auth', authHeader, authToken); // TODO delete this
     if (authToken !== token) {
         res.status(401).end();
         return;
@@ -48,6 +52,7 @@ app.get('/api/image', (req, res) => {
 });
 
 app.post('/api/login', jsonParser, (req, res) => {
+    console.log('Login API', req.body); // TODO delete this
     if (username === req.body.username && password === req.body.password) {
         res.json({ token });
         return;
