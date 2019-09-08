@@ -1,5 +1,7 @@
 const express = require('express');
 
+const token = 'ABCDEFG';
+
 const app = express();
 
 app.use((req, res, next) => {
@@ -10,19 +12,30 @@ app.use((req, res, next) => {
     next();
 });
 
-const getAuthHeader = (headers) =>
-    Object.entries(headers)
-        .filter(([key]) => 'authorization' === key.toLowerCase())
-        .map(([key, value]) => `${key}=${value}`);
+app.use((req, res, next) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).end();
+        next();
+        return;
+    }
+
+    const authToken = authHeader.replace(/^Bearer /, '');
+    if (authToken !== token) {
+        res.status(401).end();
+        next();
+        return;
+    }
+
+    next();
+});
 
 app.get('/api/hello', (req, res) => {
-    const authHeader = getAuthHeader(req.headers);
-    res.send(`Hello World: ${authHeader}`);
+    res.send(`Hello World: ${req.headers.authorization}`);
 });
 
 app.get('/api/image', (req, res) => {
-    const authHeader = getAuthHeader(req.headers);
-    console.log(`AuthHeader: ${authHeader}`);
+    console.log(`AuthHeader: ${req.headers.authorization}`);
     res.setHeader('Content-Type', 'image/jpg');
     res.sendFile('/assets/images/image1.jpg', { root: __dirname });
 });
