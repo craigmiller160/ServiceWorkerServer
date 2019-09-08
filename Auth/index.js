@@ -1,8 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const token = 'ABCDEFG';
+const username = 'user';
+const password = 'pass';
 
 const app = express();
+const jsonParser = bodyParser.json();
 
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', 'http://localhost:9080');
@@ -43,8 +47,14 @@ app.get('/api/image', (req, res) => {
     res.sendFile('/assets/images/image1.jpg', { root: __dirname });
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', jsonParser, (req, res) => {
+    if (username === req.body.username && password === req.body.password) {
+        // res.setHeader('Content-Type', 'application/json');
+        res.json({ token });
+        return;
+    }
 
+    res.status(401).end();
 });
 
 app.listen(3000, () => console.log('Listening on port 3000'));
