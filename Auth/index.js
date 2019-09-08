@@ -13,6 +13,11 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+    if (req.url === '/api/login') {
+        next();
+        return;
+    }
+
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         res.status(401).end();
@@ -36,6 +41,10 @@ app.get('/api/image', (req, res) => {
     console.log(`AuthHeader: ${req.headers.authorization}`);
     res.setHeader('Content-Type', 'image/jpg');
     res.sendFile('/assets/images/image1.jpg', { root: __dirname });
+});
+
+app.post('/api/login', (req, res) => {
+
 });
 
 app.listen(3000, () => console.log('Listening on port 3000'));
